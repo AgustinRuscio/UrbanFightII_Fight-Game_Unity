@@ -46,6 +46,7 @@ public class PlayerModel : MonoBehaviour, IDamageable
     public event Action OnGetHurtnim;
 
     public event Action<bool> OnCrouchAnim;
+    public event Action<bool> OnBlocking;
     public event Action<float> OnMoveAnim;
     #endregion
 
@@ -63,6 +64,7 @@ public class PlayerModel : MonoBehaviour, IDamageable
     [Header("States")]
     private bool _canMove = true;
     private bool _crouching = false;
+    private bool _blocking = false;
 
     void Awake()
     {
@@ -85,6 +87,7 @@ public class PlayerModel : MonoBehaviour, IDamageable
         OnLowKickAnim += view.LowKick;
         OnHighKickAnim += view.HighKick;
         OnGetHurtnim += view.GetHurt;
+        OnBlocking += view.Blocking;
     }
 
 
@@ -101,7 +104,7 @@ public class PlayerModel : MonoBehaviour, IDamageable
 
     public void Move(float xMovement)
     {
-        if (!_canMove || _crouching || !isLanded) return;
+        if (!_canMove || _crouching || !isLanded || _blocking) return;
 
         _direction = new Vector3(xMovement, 0, 0);
 
@@ -115,7 +118,7 @@ public class PlayerModel : MonoBehaviour, IDamageable
 
     public void Jump()
     {
-        if (!_canMove || _crouching || !isLanded) return;
+        if (!_canMove || _crouching || !isLanded|| _blocking) return;
 
         _rigidBody.AddForce(_rigidBody.velocity.x, _jumpForce, _rigidBody.velocity.z);
         OnJumpAnim();
@@ -123,6 +126,8 @@ public class PlayerModel : MonoBehaviour, IDamageable
 
     public void TakeDamage(float dmg)
     {
+        if (_blocking) return;
+
         _life -= dmg;
 
         if (_life <= 0)
@@ -131,9 +136,15 @@ public class PlayerModel : MonoBehaviour, IDamageable
         OnGetHurtnim();
     }
 
+    public void Blocking(bool isBloking)
+    {
+        _blocking = isBloking;
+        OnBlocking(_blocking);
+    }
+
     public void Punch()
     {
-        if (!_canMove || _crouching || !isLanded) return;
+        if (!_canMove || _crouching || !isLanded || _blocking) return;
 
         OnAttackiong(false);
         OnPunchAnim();
@@ -143,7 +154,7 @@ public class PlayerModel : MonoBehaviour, IDamageable
 
     public void HighKick()
     {
-        if (!_canMove || _crouching || !isLanded) return;
+        if (!_canMove || _crouching || !isLanded || _blocking) return;
 
         OnAttackiong(false);
         OnHighKickAnim();
@@ -153,7 +164,7 @@ public class PlayerModel : MonoBehaviour, IDamageable
 
     public void LowKick()
     {
-        if (!_canMove || _crouching || !isLanded) return;
+        if (!_canMove || _crouching || !isLanded || _blocking) return;
 
         OnAttackiong(false);
         OnLowKickAnim();
@@ -166,16 +177,15 @@ public class PlayerModel : MonoBehaviour, IDamageable
         _canMove = state;
     }
 
-    public void Crouch()
+    public void Crouch(bool isBool)
     {
-        if (!isLanded) return;
+        if (!isLanded || _blocking) return;
 
-        _crouching = !_crouching;
+        _crouching = isBool;
+
         OnCrouchAnim(_crouching);
 
-        Debug.Log(_crouching);
-
-        if(_crouching)
+        if (_crouching)
         {
             _capsuleCollider.center = new Vector3(0, -0.33f, 0.33f);
             _capsuleCollider.height = 1.33f;
@@ -186,6 +196,7 @@ public class PlayerModel : MonoBehaviour, IDamageable
             _capsuleCollider.height = 1.79f;
         }
     }
+
 
     IEnumerator Deactivate(GameObject obj, float cd)
     {

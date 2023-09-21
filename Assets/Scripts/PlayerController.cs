@@ -24,6 +24,7 @@ public class PlayerController
         OnUpdate += HighKick;
         OnUpdate += LowKick;
         OnUpdate += JumpInput;
+        OnUpdate += Block;
     }
 
     public void MovementController() => _model.Move(Input.GetAxis("Horizontal"));
@@ -33,11 +34,8 @@ public class PlayerController
         if (Input.GetKeyDown(KeyCode.W)) _model.Jump();
     }
 
-    public void Crouch()
-    {
-        if (Input.GetKeyDown(KeyCode.C)) _model.Crouch();
-    }
-
+    public void Crouch() => _model.Crouch(Input.GetKey(KeyCode.S));
+    
     public void Punch()
     {
         if (Input.GetKeyDown(KeyCode.J)) _model.Punch();
@@ -52,4 +50,6 @@ public class PlayerController
     {
         if (Input.GetKeyDown(KeyCode.K)) _model.LowKick();
     }
+
+    public void Block() => _model.Blocking(Input.GetKey(KeyCode.Q)); 
 }

@@ -19,4 +19,5 @@ public class PlayerView
     public void GetHurt() => _animator.SetTrigger("GetHurt");
     public void LowKick() => _animator.SetTrigger("LowKick");
     public void HighKick() => _animator.SetTrigger("HighKick");
+    public void Blocking(bool isBlocking) => _animator.SetBool("Blocking", isBlocking);
 }
