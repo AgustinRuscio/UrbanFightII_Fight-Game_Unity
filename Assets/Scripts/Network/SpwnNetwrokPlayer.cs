@@ -10,7 +10,7 @@ public class SpwnNetwrokPlayer : MonoBehaviour, INetworkRunnerCallbacks
     private NetworkPlayer _playerPrefab;
 
     [SerializeField]
-    private Transform _playerTransform;
+    private Transform _playerOneSpawnPoint, _playerTwoSpawnPoint;
 
     NetworkPlayerInput _playerInputs;
 
@@ -33,7 +33,11 @@ public class SpwnNetwrokPlayer : MonoBehaviour, INetworkRunnerCallbacks
         if (runner.Topology == SimulationConfig.Topologies.Shared)
         {
             Debug.Log("[Custom msg] On Connected to Server - Spawning local player");
-            runner.Spawn(_playerPrefab, _playerTransform.position, _playerTransform.rotation, runner.LocalPlayer);
+            if (runner.ActivePlayers.Equals(0))
+                runner.Spawn(_playerPrefab, _playerOneSpawnPoint.position, _playerOneSpawnPoint.rotation, runner.LocalPlayer);
+            else
+                runner.Spawn(_playerPrefab, _playerTwoSpawnPoint.position, _playerTwoSpawnPoint.rotation, runner.LocalPlayer);
+            
         }
     }
 

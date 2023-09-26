@@ -1756,6 +1756,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77d6a61f1b18bd94b8add48bd18912f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
   _damage: 0
 --- !u!1 &6768145648477090799
 GameObject:
@@ -2180,6 +2181,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77d6a61f1b18bd94b8add48bd18912f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
   _damage: 0
 --- !u!1 &6768145649403195999
 GameObject:
@@ -2279,6 +2281,9 @@ MonoBehaviour:
   - {fileID: 7365003832013828143}
   - {fileID: 6768145649403195992}
   - {fileID: 5190739253010777543}
+  - {fileID: 7451455101367316207}
+  - {fileID: 8078733451730541425}
+  - {fileID: 6460749199487569638}
   SimulationBehaviours: []
 --- !u!114 &7365003832013828143
 MonoBehaviour:
@@ -2328,6 +2333,7 @@ MonoBehaviour:
   _speed: 6
   _jumpForce: 300
   _maxLlife: 100
+  __life: 0
   target: {fileID: 0}
   _midPunchZone: {fileID: 6768145649568037761}
   _downPunchZone: {fileID: 6768145647763066644}
@@ -2467,6 +2473,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77d6a61f1b18bd94b8add48bd18912f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
   _damage: 0
 --- !u!1 &6911917432611113968
 GameObject:
