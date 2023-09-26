@@ -1,13 +1,19 @@
 using System.Collections;
 using UnityEngine;
 using System;
-
+using Fusion;
 
 [RequireComponent(typeof(Rigidbody))]
-public class PlayerModel : MonoBehaviour, IDamageable
+public class PlayerModel : NetworkBehaviour, IDamageable
 {
+    //NetWork
+
+    NetworkInputData inputData;
+
+
+
     [Header("Components")]
-    private Rigidbody _rigidBody;
+    private NetworkRigidbody _rigidBody;
 
     [SerializeField]
     private Animator _animator;
@@ -25,7 +31,12 @@ public class PlayerModel : MonoBehaviour, IDamageable
     private float _jumpForce;
 
     [SerializeField]
-    private float maxLlife, _life;
+    private float _maxLlife;
+
+    [Networked(OnChanged = nameof(OnLifeChange))]
+    public float _life { get; set; }
+
+    public event Action<float> OnDamage = delegate { };
 
     [SerializeField]
     private Transform target;
@@ -68,7 +79,7 @@ public class PlayerModel : MonoBehaviour, IDamageable
 
     void Awake()
     {
-        _rigidBody = GetComponent<Rigidbody>();
+        _rigidBody = GetComponent<NetworkRigidbody>();
         _capsuleCollider = GetComponent<CapsuleCollider>();
 
         //Setting controller Methods in Actions
@@ -99,7 +110,25 @@ public class PlayerModel : MonoBehaviour, IDamageable
     private void Update()
     {
         OnControllerUpdate();
-        transform.LookAt(target.position);
+        //transform.LookAt(target.position);
+    }
+
+    public override void FixedUpdateNetwork()
+    {
+        if (GetInput(out inputData))
+        {
+            if (inputData.isJump)
+                Jump();
+
+            Move(inputData.xMovement);
+        }
+    }
+
+    private static void OnLifeChange(Changed<PlayerModel> changed)
+    {
+        var behaviour = changed.Behaviour;
+    
+        behaviour.OnDamage(behaviour._life / behaviour._maxLlife);
     }
 
     public void Move(float xMovement)
@@ -113,18 +142,21 @@ public class PlayerModel : MonoBehaviour, IDamageable
         _direction *= _speed;
 
         OnMoveAnim(_direction.x);
-        _rigidBody.AddForce(_direction);
+        _rigidBody.Rigidbody.AddForce(_direction);
     }
 
     public void Jump()
     {
         if (!_canMove || _crouching || !isLanded|| _blocking) return;
 
-        _rigidBody.AddForce(_rigidBody.velocity.x, _jumpForce, _rigidBody.velocity.z);
+        _rigidBody.Rigidbody.AddForce(_rigidBody.Rigidbody.velocity.x, _jumpForce, _rigidBody.Rigidbody.velocity.z);
         OnJumpAnim();
     }
 
-    public void TakeDamage(float dmg)
+    public void TakeDamage(float dmg) => RPC_GetHit(dmg);
+
+    [Rpc(RpcSources.Proxies, RpcTargets.StateAuthority)]
+    public void RPC_GetHit(float dmg)
     {
         if (_blocking) return;
 
@@ -217,6 +249,6 @@ public class PlayerModel : MonoBehaviour, IDamageable
 
     private void Died()
     {
-
+        Runner.Shutdown();
     }
 }
