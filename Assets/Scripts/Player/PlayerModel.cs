@@ -90,7 +90,6 @@ public class PlayerModel : NetworkBehaviour, IDamageable
 
         //Setting view Methods on Actions
         var view = new PlayerView(_animator);
-        _life = _maxLlife;
 
         OnMoveAnim += view.Move;
         OnCrouchAnim += view.Crouch;
@@ -100,6 +99,12 @@ public class PlayerModel : NetworkBehaviour, IDamageable
         OnHighKickAnim += view.HighKick;
         OnGetHurtnim += view.GetHurt;
         OnBlocking += view.Blocking;
+    }
+
+    public override void Spawned()
+    {
+
+        _life = _maxLlife;
     }
 
 
