@@ -3,6 +3,7 @@ using UnityEngine;
 using Fusion;
 using Fusion.Sockets;
 using System;
+using System.Linq;
 
 public class SpwnNetwrokPlayer : MonoBehaviour, INetworkRunnerCallbacks
 {
@@ -33,11 +34,10 @@ public class SpwnNetwrokPlayer : MonoBehaviour, INetworkRunnerCallbacks
         if (runner.Topology == SimulationConfig.Topologies.Shared)
         {
             Debug.Log("[Custom msg] On Connected to Server - Spawning local player");
-            if (runner.ActivePlayers.Equals(0))
+            if (!runner.ActivePlayers.Any())
                 runner.Spawn(_playerPrefab, _playerOneSpawnPoint.position, _playerOneSpawnPoint.rotation, runner.LocalPlayer);
             else
                 runner.Spawn(_playerPrefab, _playerTwoSpawnPoint.position, _playerTwoSpawnPoint.rotation, runner.LocalPlayer);
-            
         }
     }
 
