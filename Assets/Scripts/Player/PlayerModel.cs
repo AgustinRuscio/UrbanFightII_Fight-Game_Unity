@@ -33,8 +33,8 @@ public class PlayerModel : NetworkBehaviour, IDamageable
     [SerializeField]
     private float _maxLlife;
 
-    [Networked(OnChanged = nameof(OnLifeChange))]
-    float _life { get; set; }
+    [Networked(OnChanged = nameof(OnLifeChange))] [HideInInspector]
+    public float _life { get; set; }
 
     public event Action<float> OnDamage = delegate { };
 
