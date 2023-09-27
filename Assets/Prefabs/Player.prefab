@@ -1757,7 +1757,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
-  _damage: 0
+  _damage: 7
 --- !u!1 &6768145648477090799
 GameObject:
   m_ObjectHideFlags: 0
@@ -2182,7 +2182,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
-  _damage: 0
+  _damage: 25
 --- !u!1 &6768145649403195999
 GameObject:
   m_ObjectHideFlags: 0
@@ -2474,7 +2474,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
-  _damage: 0
+  _damage: 10
 --- !u!1 &6911917432611113968
 GameObject:
   m_ObjectHideFlags: 0
