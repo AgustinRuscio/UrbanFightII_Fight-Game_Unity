@@ -2331,7 +2331,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   _speed: 6
-  _jumpForce: 300
+  _jumpForce: 180
   _maxLlife: 100
   __life: 0
   target: {fileID: 0}

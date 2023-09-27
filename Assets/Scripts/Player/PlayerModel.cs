@@ -103,7 +103,6 @@ public class PlayerModel : NetworkBehaviour, IDamageable
 
     public override void Spawned()
     {
-
         _life = _maxLlife;
     }
 
