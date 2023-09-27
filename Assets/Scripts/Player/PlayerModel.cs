@@ -34,7 +34,7 @@ public class PlayerModel : NetworkBehaviour, IDamageable
     private float _maxLlife;
 
     [Networked(OnChanged = nameof(OnLifeChange))]
-    public float _life { get; set; }
+    float _life { get; set; }
 
     public event Action<float> OnDamage = delegate { };
 
@@ -90,6 +90,7 @@ public class PlayerModel : NetworkBehaviour, IDamageable
 
         //Setting view Methods on Actions
         var view = new PlayerView(_animator);
+        _life = _maxLlife;
 
         OnMoveAnim += view.Move;
         OnCrouchAnim += view.Crouch;
