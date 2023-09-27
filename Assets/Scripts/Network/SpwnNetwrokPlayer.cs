@@ -34,10 +34,20 @@ public class SpwnNetwrokPlayer : MonoBehaviour, INetworkRunnerCallbacks
         if (runner.Topology == SimulationConfig.Topologies.Shared)
         {
             Debug.Log("[Custom msg] On Connected to Server - Spawning local player");
-            if (!runner.ActivePlayers.Any())
-                runner.Spawn(_playerPrefab, _playerOneSpawnPoint.position, _playerOneSpawnPoint.rotation, runner.LocalPlayer);
-            else
-                runner.Spawn(_playerPrefab, _playerTwoSpawnPoint.position, _playerTwoSpawnPoint.rotation, runner.LocalPlayer);
+
+            NetworkPlayer a = runner.Spawn(_playerPrefab, _playerOneSpawnPoint.position, _playerOneSpawnPoint.rotation, runner.LocalPlayer);
+            GameManager.instance.AddPlayer(a);
+
+            // if (!runner.ActivePlayers.Any())
+            // {
+            //     NetworkPlayer a = runner.Spawn(_playerPrefab, _playerOneSpawnPoint.position, _playerOneSpawnPoint.rotation, runner.LocalPlayer);
+            //     GameManager.instance.AddPlayer(a);
+            // }
+            // else
+            // {
+            //     NetworkPlayer a = runner.Spawn(_playerPrefab, _playerTwoSpawnPoint.position, _playerTwoSpawnPoint.rotation, runner.LocalPlayer);
+            //     GameManager.instance.AddPlayer(a);
+            // }
         }
     }
 
