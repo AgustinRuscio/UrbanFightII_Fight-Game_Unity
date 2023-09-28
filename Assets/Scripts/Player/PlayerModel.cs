@@ -14,6 +14,10 @@ public class PlayerModel : NetworkBehaviour, IDamageable
     public float cameraMargin = 95f;
 
 
+    [SerializeField]
+    private GameObject _youIndicatorPrefab;
+    private GameObject _youIndicator;
+
     [Header("Components")]
     private NetworkRigidbody _rigidBody;
 
@@ -101,6 +105,8 @@ public class PlayerModel : NetworkBehaviour, IDamageable
         OnHighKickAnim += view.HighKick;
         OnGetHurtnim += view.GetHurt;
         OnBlocking += view.Blocking;
+
+        
     }
 
     public override void Spawned()
@@ -109,6 +115,13 @@ public class PlayerModel : NetworkBehaviour, IDamageable
         cam = Camera.main;
         CameraMovement.instance.AddPlayer(transform);
         TargetSetter.Instance.AddPlayer(this);
+
+        if (Object.HasStateAuthority)
+        {
+            _youIndicator = Instantiate(_youIndicatorPrefab, transform);
+            _youIndicator.transform.Rotate(0, -90, 0);
+        }
+
     }
 
     public void SetTarget(Transform t)
@@ -120,11 +133,14 @@ public class PlayerModel : NetworkBehaviour, IDamageable
     {
 
         CameraMovement.instance.RemovePlayer(transform);
+        TargetSetter.Instance.RemovePlayer(this);
     }
 
 
     private void Update()
     {
+        if(_youIndicator != null)
+        _youIndicator.transform.position = transform.position + Vector3.up * 1.4f;
     }
 
     public override void FixedUpdateNetwork()

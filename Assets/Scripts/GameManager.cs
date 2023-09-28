@@ -11,12 +11,15 @@ public class GameManager : NetworkBehaviour
     private Transform[] _playerTwoSpawnPoint;
 
     [SerializeField]
+    public List<Transform> Players;
+
+    [SerializeField]
     private GameObject loseCanvas, winCanvas;
     
     public int PlayerCounting { get; private set; }
 
     [SerializeField]
-    private TextMeshProUGUI _timerText;
+    private TextMeshProUGUI _timerText, counter;
 
     private float _timer = 90;
 
@@ -31,6 +34,7 @@ public class GameManager : NetworkBehaviour
     }
 
    
+    
 
     private void Update()
     {
@@ -58,6 +62,8 @@ public class GameManager : NetworkBehaviour
         {
             _timerText.gameObject.SetActive(false);
         }
+
+        counter.text = Players.Count.ToString();
     }
     
     

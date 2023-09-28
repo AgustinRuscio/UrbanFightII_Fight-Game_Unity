@@ -17,6 +17,7 @@ public class TargetSetter : MonoBehaviour
         else
             Destroy(gameObject);
     }
+
     public void AddPlayer(PlayerModel playerToAdd)
     {
         if (!_players.Contains(playerToAdd))
@@ -27,6 +28,17 @@ public class TargetSetter : MonoBehaviour
             _players[0].SetTarget(_players[1].transform);
             _players[1].SetTarget(_players[0].transform);
 
+        }
+    }
+
+    public void RemovePlayer(PlayerModel playerToAdd)
+    {
+        if (_players.Contains(playerToAdd))
+            _players.Add(playerToAdd);
+
+        foreach (PlayerModel playerToRemove in _players)
+        {
+            playerToRemove.SetTarget(null);
         }
     }
 }
