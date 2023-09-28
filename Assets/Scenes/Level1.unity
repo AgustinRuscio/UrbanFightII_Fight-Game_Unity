@@ -1146,8 +1146,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
-  _playerOneSpawnPoint: {fileID: 694142009}
-  _playerTwoSpawnPoint: {fileID: 342859962}
+  _playerTwoSpawnPoint: []
   loseCanvas: {fileID: 452883002}
   winCanvas: {fileID: 90778831}
   _timerText: {fileID: 99631954}
@@ -1409,7 +1408,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_BoundingSphereOverride: {x: 8.83e-43, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -1614,6 +1613,7 @@ GameObject:
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
   - component: {fileID: 963194229}
+  - component: {fileID: 963194230}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1701,6 +1701,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   players: []
   cameraSpeed: 5
+--- !u!114 &963194230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf57e528dc9fafb4f99e72590b677b13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &965981036
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,7 +7,7 @@ public class CameraMovement : MonoBehaviour
 {
     public static CameraMovement instance;
 
-    public List<PlayerModel> players = new List<PlayerModel>();
+    public List<Transform> players = new ();
     public float cameraSpeed = 5f;
 
     private Camera mainCamera;
@@ -25,20 +25,13 @@ public class CameraMovement : MonoBehaviour
         mainCamera = Camera.main;
     }
 
-    public void AddPlayer(PlayerModel playerTransform)
+    public void AddPlayer(Transform playerTransform)
     {
         if(!players.Contains(playerTransform))
             players.Add(playerTransform);
-
-        if(players.Count > 1)
-        {
-            players[0].SetTarget(players[1].transform);
-            players[1].SetTarget(players[0].transform);
-
-        }
     }
 
-    public void RemovePlayer(PlayerModel playerTransform)
+    public void RemovePlayer(Transform playerTransform)
     {
         if(players.Contains(playerTransform))
             players.Remove(playerTransform);
@@ -50,9 +43,10 @@ public class CameraMovement : MonoBehaviour
             return;
 
         Vector3 middlePoint = Vector3.zero;
+
         foreach (var player in players)
         {
-            middlePoint += player.transform.position;
+            middlePoint += player.position;
         }
         middlePoint /= players.Count;
 

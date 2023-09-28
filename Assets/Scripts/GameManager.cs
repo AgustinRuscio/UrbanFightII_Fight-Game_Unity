@@ -7,12 +7,8 @@ public class GameManager : NetworkBehaviour
 {
     public static GameManager instance;
 
-    private NetworkPlayer _playerOne, _playerTwo;
-
     [SerializeField]
-    private Transform _playerOneSpawnPoint, _playerTwoSpawnPoint;
-
-    private int _playerCount = 0;
+    private Transform[] _playerTwoSpawnPoint;
 
     [SerializeField]
     private GameObject loseCanvas, winCanvas;
@@ -34,24 +30,7 @@ public class GameManager : NetworkBehaviour
             Destroy(gameObject);
     }
 
-    public void AddPlayer(NetworkPlayer playerToAdd)
-    {
-        if(_playerCount == 0)
-        {
-            _playerOne = playerToAdd;
-            _playerCount++;
-            _playerOne.transform.position = _playerOneSpawnPoint.position;
-            _playerOne.transform.rotation = _playerOneSpawnPoint.rotation;
-            _timerText.gameObject.SetActive(true);
-            MatchStarted = true;    
-        }
-        else
-        {
-            _playerTwo = playerToAdd;
-            _playerTwo.transform.position = _playerTwoSpawnPoint.position;
-            _playerTwo.transform.rotation = _playerTwoSpawnPoint.rotation;
-        }
-    }
+   
 
     private void Update()
     {

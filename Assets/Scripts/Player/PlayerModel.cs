@@ -107,7 +107,8 @@ public class PlayerModel : NetworkBehaviour, IDamageable
     {
         _life = _maxLlife;
         cam = Camera.main;
-        CameraMovement.instance.AddPlayer(this);
+        CameraMovement.instance.AddPlayer(transform);
+        TargetSetter.Instance.AddPlayer(this);
     }
 
     public void SetTarget(Transform t)
@@ -118,7 +119,7 @@ public class PlayerModel : NetworkBehaviour, IDamageable
     public override void Despawned(NetworkRunner runner, bool hasState)
     {
 
-        CameraMovement.instance.RemovePlayer(this);
+        CameraMovement.instance.RemovePlayer(transform);
     }
 
 

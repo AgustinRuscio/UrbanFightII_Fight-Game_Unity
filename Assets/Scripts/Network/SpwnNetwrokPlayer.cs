@@ -36,7 +36,6 @@ public class SpwnNetwrokPlayer : MonoBehaviour, INetworkRunnerCallbacks
             Debug.Log("[Custom msg] On Connected to Server - Spawning local player");
 
             NetworkPlayer a = runner.Spawn(_playerPrefab, _playerOneSpawnPoint.position, _playerOneSpawnPoint.rotation, runner.LocalPlayer);
-            GameManager.instance.AddPlayer(a);
 
 
             // if (!runner.ActivePlayers.Any())
