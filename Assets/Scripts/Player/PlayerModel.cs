@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using System;
 using Fusion;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerModel : NetworkBehaviour, IDamageable
@@ -83,6 +84,8 @@ public class PlayerModel : NetworkBehaviour, IDamageable
     private bool _crouching = false;
     private bool _blocking = false;
 
+    private bool MatchOn;
+
     void Awake()
     {
         _rigidBody = GetComponent<NetworkRigidbody>();
@@ -141,10 +144,16 @@ public class PlayerModel : NetworkBehaviour, IDamageable
     {
         if(_youIndicator != null)
         _youIndicator.transform.position = transform.position + Vector3.up * 1.4f;
+
+        MatchOn = !GameManager.instance.MatchOn;
     }
+
+
 
     public override void FixedUpdateNetwork()
     {
+        if(!MatchOn) return;
+
         OnControllerUpdate();
         OnControllerFixedUpdate();
 
@@ -202,6 +211,17 @@ public class PlayerModel : NetworkBehaviour, IDamageable
             Died();
 
         OnGetHurtnim();
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.Proxies)]
+    public void RPC_Win()
+    {
+        GameManager.instance.PlayerWin();
+    }
+
+    public void Winning()
+    {
+        RPC_Win();
     }
 
     public void Blocking(bool isBloking)
@@ -285,6 +305,7 @@ public class PlayerModel : NetworkBehaviour, IDamageable
 
     private void Died()
     {
+        Winning();
         GameManager.instance.PlayerDeath();
         //Runner.Shutdown();
     }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;using TMPro;
 using Fusion;
+using UnityEngine.SceneManagement;
 
 public class GameManager : NetworkBehaviour
 {
@@ -23,7 +24,7 @@ public class GameManager : NetworkBehaviour
 
     private float _timer = 90;
 
-    bool MatchStarted;
+    public bool MatchOn { get; private set; }
 
     private void Awake()
     {
@@ -38,7 +39,8 @@ public class GameManager : NetworkBehaviour
 
     private void Update()
     {
-        if(MatchStarted)
+        if (!MatchOn) return;
+
             _timer -= Time.deltaTime;
 
         if (_timer <= 0)
@@ -47,14 +49,14 @@ public class GameManager : NetworkBehaviour
 
     private void MatchFinishedByTime()
     {
-        MatchStarted = false;
+        MatchOn = false;
 
 
     }
 
     public override void FixedUpdateNetwork()
     {
-        if (MatchStarted)
+        if (MatchOn)
         {
             _timerText.text = _timer.ToString("0");
         }
@@ -70,7 +72,17 @@ public class GameManager : NetworkBehaviour
 
     public void PlayerDeath()
     {
+        Time.timeScale =0f;
+        MatchOn = false;
         loseCanvas.SetActive(true);
     }
+
+    public void PlayerWin()
+    {
+        Time.timeScale =0f;
+        MatchOn = false;
+        winCanvas.SetActive(true);
+    }
+
 
 }
