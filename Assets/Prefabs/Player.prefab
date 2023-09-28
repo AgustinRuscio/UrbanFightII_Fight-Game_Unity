@@ -2199,6 +2199,7 @@ GameObject:
   - component: {fileID: 6768145649403195992}
   - component: {fileID: 5190739253010777543}
   - component: {fileID: 8797976965312707374}
+  - component: {fileID: 4051280802073243865}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -2281,6 +2282,7 @@ MonoBehaviour:
   - {fileID: 7365003832013828143}
   - {fileID: 6768145649403195992}
   - {fileID: 5190739253010777543}
+  - {fileID: 4051280802073243865}
   - {fileID: 7451455101367316207}
   - {fileID: 8078733451730541425}
   - {fileID: 6460749199487569638}
@@ -2363,6 +2365,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccd7dec5adac5a4468078f911f0bf50e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4051280802073243865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6768145649403195999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 506319458, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
+  Animator: {fileID: 5109309892331552612}
+  TotalWords: 2
+  SyncSettings: 79
+  FloatAccuracy:
+    _value: 0
+    _inverse: 0
+    _hash: -814817977
+  TimeAccuracy:
+    _value: 0
+    _inverse: 0
+    _hash: 1061325578
+  WeightAccuracy:
+    _value: 0
+    _inverse: 0
+    _hash: -814817977
+  StateHashes: 000000008a18fce4b9abd9d328a981077af3fe2e2ef6da876d58e9844ea364a254325e4804ee343380cde2dc5c5f20edde106c685b575a9bdf748c7426b8da42a4f796c7
+  TriggerHashes: 0000000028a981075c5f20ed04ee34334ea364a25738500e
 --- !u!1 &6768145649568037761
 GameObject:
   m_ObjectHideFlags: 0

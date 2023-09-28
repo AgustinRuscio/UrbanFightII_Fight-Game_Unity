@@ -10,6 +10,8 @@ public class PlayerModel : NetworkBehaviour, IDamageable
 
     NetworkInputData inputData;
 
+    Camera cam;
+    public float cameraMargin = 95f;
 
 
     [Header("Components")]
@@ -104,22 +106,31 @@ public class PlayerModel : NetworkBehaviour, IDamageable
     public override void Spawned()
     {
         _life = _maxLlife;
+        cam = Camera.main;
+        CameraMovement.instance.AddPlayer(this);
     }
 
-
-    void FixedUpdate()
+    public void SetTarget(Transform t)
     {
-        OnControllerFixedUpdate();
+        target = t;
     }
+
+    public override void Despawned(NetworkRunner runner, bool hasState)
+    {
+
+        CameraMovement.instance.RemovePlayer(this);
+    }
+
 
     private void Update()
     {
-        OnControllerUpdate();
-        //transform.LookAt(target.position);
     }
 
     public override void FixedUpdateNetwork()
     {
+        OnControllerUpdate();
+        OnControllerFixedUpdate();
+
         if (GetInput(out inputData))
         {
             if (inputData.isJump)
@@ -127,6 +138,9 @@ public class PlayerModel : NetworkBehaviour, IDamageable
 
             Move(inputData.xMovement);
         }
+
+        if (target != null)
+            transform.LookAt(target.position);
     }
 
     private static void OnLifeChange(Changed<PlayerModel> changed)
@@ -254,6 +268,7 @@ public class PlayerModel : NetworkBehaviour, IDamageable
 
     private void Died()
     {
-        Runner.Shutdown();
+        GameManager.instance.PlayerDeath();
+        //Runner.Shutdown();
     }
 }

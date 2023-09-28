@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using UnityEngine;using TMPro;
 using Fusion;
 
 public class GameManager : NetworkBehaviour
@@ -14,7 +14,17 @@ public class GameManager : NetworkBehaviour
 
     private int _playerCount = 0;
 
+    [SerializeField]
+    private GameObject loseCanvas, winCanvas;
+    
     public int PlayerCounting { get; private set; }
+
+    [SerializeField]
+    private TextMeshProUGUI _timerText;
+
+    private float _timer = 90;
+
+    bool MatchStarted;
 
     private void Awake()
     {
@@ -32,6 +42,8 @@ public class GameManager : NetworkBehaviour
             _playerCount++;
             _playerOne.transform.position = _playerOneSpawnPoint.position;
             _playerOne.transform.rotation = _playerOneSpawnPoint.rotation;
+            _timerText.gameObject.SetActive(true);
+            MatchStarted = true;    
         }
         else
         {
@@ -39,7 +51,41 @@ public class GameManager : NetworkBehaviour
             _playerTwo.transform.position = _playerTwoSpawnPoint.position;
             _playerTwo.transform.rotation = _playerTwoSpawnPoint.rotation;
         }
-        
+    }
+
+    private void Update()
+    {
+        if(MatchStarted)
+            _timer -= Time.deltaTime;
+
+        if (_timer <= 0)
+            MatchFinishedByTime();
+    }
+
+    private void MatchFinishedByTime()
+    {
+        MatchStarted = false;
+
+
+    }
+
+    public override void FixedUpdateNetwork()
+    {
+        if (MatchStarted)
+        {
+            _timerText.text = _timer.ToString("0");
+        }
+        else
+        {
+            _timerText.gameObject.SetActive(false);
+        }
+    }
+    
+    
+
+    public void PlayerDeath()
+    {
+        loseCanvas.SetActive(true);
     }
 
 }

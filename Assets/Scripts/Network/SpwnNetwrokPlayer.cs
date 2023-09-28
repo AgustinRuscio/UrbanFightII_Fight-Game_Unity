@@ -38,6 +38,7 @@ public class SpwnNetwrokPlayer : MonoBehaviour, INetworkRunnerCallbacks
             NetworkPlayer a = runner.Spawn(_playerPrefab, _playerOneSpawnPoint.position, _playerOneSpawnPoint.rotation, runner.LocalPlayer);
             GameManager.instance.AddPlayer(a);
 
+
             // if (!runner.ActivePlayers.Any())
             // {
             //     NetworkPlayer a = runner.Spawn(_playerPrefab, _playerOneSpawnPoint.position, _playerOneSpawnPoint.rotation, runner.LocalPlayer);
