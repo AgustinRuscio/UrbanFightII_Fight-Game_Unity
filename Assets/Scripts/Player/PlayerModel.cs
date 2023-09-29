@@ -119,12 +119,30 @@ public class PlayerModel : NetworkBehaviour, IDamageable
         CameraMovement.instance.AddPlayer(transform);
         TargetSetter.Instance.AddPlayer(this);
 
-        if (Object.HasStateAuthority)
+        if (Object.HasInputAuthority)
         {
             _youIndicator = Instantiate(_youIndicatorPrefab, transform);
             _youIndicator.transform.Rotate(0, -90, 0);
-        }
 
+            StartCoroutine(wait());
+        }
+    }
+    public void SetPosition(Vector3 newPos)
+    {
+        RPC_Position(newPos);
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    public void RPC_Position(Vector3 newPos)
+    {
+        transform.position = newPos;
+    }
+
+    private IEnumerator wait()
+    {
+        yield return new WaitForSeconds(.2f);
+
+        GameManager.instance.AddPLayer(this);
     }
 
     public void SetTarget(Transform t)
@@ -134,7 +152,6 @@ public class PlayerModel : NetworkBehaviour, IDamageable
 
     public override void Despawned(NetworkRunner runner, bool hasState)
     {
-
         CameraMovement.instance.RemovePlayer(transform);
         TargetSetter.Instance.RemovePlayer(this);
     }
@@ -147,7 +164,6 @@ public class PlayerModel : NetworkBehaviour, IDamageable
 
         MatchOn = !GameManager.instance.MatchOn;
     }
-
 
 
     public override void FixedUpdateNetwork()

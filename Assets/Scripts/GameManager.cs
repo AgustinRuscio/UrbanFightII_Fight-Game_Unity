@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;using TMPro;
+using UnityEngine;
+using TMPro;
 using Fusion;
 using UnityEngine.SceneManagement;
 
@@ -12,10 +13,13 @@ public class GameManager : NetworkBehaviour
     private Transform[] _playerTwoSpawnPoint;
 
     [SerializeField]
-    public List<Transform> Players;
+    public List<PlayerModel> _players;
+
+    public PlayerModel _playerOne;
+    public PlayerModel _playerTwo;
 
     [SerializeField]
-    private GameObject loseCanvas, winCanvas;
+    private GameObject loseCanvas, winCanvas, FightImage;
     
     public int PlayerCounting { get; private set; }
 
@@ -32,8 +36,14 @@ public class GameManager : NetworkBehaviour
             instance = this;
         else
             Destroy(gameObject);
+
     }
 
+    IEnumerator Desapear()
+    {
+        yield return new WaitForSeconds(1f);
+        FightImage.gameObject.SetActive(false);
+    }
    
     
 
@@ -54,6 +64,54 @@ public class GameManager : NetworkBehaviour
 
     }
 
+    public void AddPLayer(PlayerModel model)
+    {
+        RPC_AddPLayer(model);
+
+
+        //if (!Object.HasStateAuthority) return;
+        //
+        //if (!_players.Contains(model))
+        //       _players.Add(model);
+
+            //if (!Object.HasStateAuthority)
+            //    RPC_AddPLayer(model);
+            //else
+            //{
+            //    if (!_players.Contains(model))
+            //        _players.Add(model);
+            //}
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    public void RPC_AddPLayer(PlayerModel model)
+    {
+        if (!_players.Contains(model))
+        {
+            _players.Add(model);
+
+            if (_playerOne == null)
+            {
+                _playerOne = model;
+                Debug.Log("I'm player one");
+            }
+            else _playerTwo = model;
+        
+        
+            if(_playerOne != null && _playerTwo != null)
+            {
+                for (int i = 0; i < _players.Count; i++)
+                {
+                    _players[i].SetPosition(_playerTwoSpawnPoint[i].position);
+                }
+            }
+
+        }
+
+
+
+    }
+
     public override void FixedUpdateNetwork()
     {
         if (MatchOn)
@@ -65,9 +123,10 @@ public class GameManager : NetworkBehaviour
             _timerText.gameObject.SetActive(false);
         }
 
-        counter.text = Players.Count.ToString();
+        counter.text = _players.Count.ToString();
     }
     
+
     
 
     public void PlayerDeath()
