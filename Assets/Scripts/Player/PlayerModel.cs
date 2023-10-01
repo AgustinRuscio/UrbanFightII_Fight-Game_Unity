@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using System;
 using Fusion;
+using UnityEngine.UI;
 using System.Collections.Generic;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -21,6 +22,9 @@ public class PlayerModel : NetworkBehaviour, IDamageable
 
     [Header("Components")]
     private NetworkRigidbody _rigidBody;
+
+    [SerializeField]
+    private Slider sliderBar;
 
     [SerializeField]
     private Animator _animator;
@@ -90,6 +94,7 @@ public class PlayerModel : NetworkBehaviour, IDamageable
     {
         _rigidBody = GetComponent<NetworkRigidbody>();
         _capsuleCollider = GetComponent<CapsuleCollider>();
+        sliderBar = _youIndicatorPrefab.GetComponent<Slider>();
 
         //Setting controller Methods in Actions
         var controller = new PlayerController(this);
@@ -114,7 +119,7 @@ public class PlayerModel : NetworkBehaviour, IDamageable
 
     public override void Spawned()
     {
-        _life = _maxLlife;
+        _life = _maxLlife;        
         cam = Camera.main;
         CameraMovement.instance.AddPlayer(transform);
         TargetSetter.Instance.AddPlayer(this);
@@ -222,7 +227,7 @@ public class PlayerModel : NetworkBehaviour, IDamageable
         if (_blocking) return;
 
         _life -= dmg;
-
+        sliderBar.value = _life;
         if (_life <= 0)
             Died();
 
