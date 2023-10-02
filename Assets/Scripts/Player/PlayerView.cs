@@ -1,23 +1,24 @@
 using System;
 using UnityEngine;
+using Fusion;
 
 public class PlayerView 
 {
-    private Animator _animator;
+    private NetworkMecanimAnimator _animator;
 
-    public PlayerView(Animator animator)
+    public PlayerView(NetworkMecanimAnimator animator)
     {
         _animator = animator;
     }
 
-    public void Move(float x) => _animator.SetFloat("Move", x);
+    public void Move(float x) => _animator.Animator.SetFloat("Move", x);
     public void Jump() => _animator.SetTrigger("Jump");
 
-    public void Crouch (bool isCrouching) => _animator.SetBool("Crouch", isCrouching);
+    public void Crouch (bool isCrouching) => _animator.Animator.SetBool("Crouch", isCrouching);
 
     public void Punch() => _animator.SetTrigger("Punch");
     public void GetHurt() => _animator.SetTrigger("GetHurt");
     public void LowKick() => _animator.SetTrigger("LowKick");
     public void HighKick() => _animator.SetTrigger("HighKick");
-    public void Blocking(bool isBlocking) => _animator.SetBool("Blocking", isBlocking);
+    public void Blocking(bool isBlocking) => _animator.Animator.SetBool("Blocking", isBlocking);
 }

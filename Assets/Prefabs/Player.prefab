@@ -2016,7 +2016,7 @@ MonoBehaviour:
   _interpolationDataSource: 0
   cameraMargin: 95
   _youIndicatorPrefab: {fileID: 5586702096096294290, guid: c785ac8b580a56647be42eb4ac18d3d4, type: 3}
-  _animator: {fileID: 5109309892331552612}
+  _animator: {fileID: 8133198482811471003}
   _groundMask:
     serializedVersion: 2
     m_Bits: 128

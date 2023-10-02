@@ -23,11 +23,11 @@ public class PlayerModel : NetworkBehaviour, IDamageable
     [Header("Components")]
     private NetworkRigidbody _rigidBody;
 
-    [SerializeField]
-    private Slider sliderBar;
+   // [SerializeField]
+    //private Slider sliderBar;
 
     [SerializeField]
-    private Animator _animator;
+    private NetworkMecanimAnimator _animator;
 
     private CapsuleCollider _capsuleCollider;
 
@@ -42,7 +42,7 @@ public class PlayerModel : NetworkBehaviour, IDamageable
     private float _jumpForce;
 
     [SerializeField]
-    private float _maxLlife;
+    public float _maxLlife;
 
     [Networked(OnChanged = nameof(OnLifeChange))] [HideInInspector]
     public float _life { get; set; }
@@ -60,6 +60,7 @@ public class PlayerModel : NetworkBehaviour, IDamageable
     private Action OnControllerUpdate;
     private Action OnControllerFixedUpdate;
 
+
     //-----View
     public event Action OnPunchAnim;
     public event Action OnLowKickAnim;
@@ -70,6 +71,7 @@ public class PlayerModel : NetworkBehaviour, IDamageable
     public event Action<bool> OnCrouchAnim;
     public event Action<bool> OnBlocking;
     public event Action<float> OnMoveAnim;
+   
     #endregion
 
 
@@ -94,7 +96,7 @@ public class PlayerModel : NetworkBehaviour, IDamageable
     {
         _rigidBody = GetComponent<NetworkRigidbody>();
         _capsuleCollider = GetComponent<CapsuleCollider>();
-        sliderBar = _youIndicatorPrefab.GetComponent<Slider>();
+       // sliderBar = _youIndicatorPrefab.GetComponent<Slider>();
 
         //Setting controller Methods in Actions
         var controller = new PlayerController(this);
@@ -116,6 +118,7 @@ public class PlayerModel : NetworkBehaviour, IDamageable
 
         
     }
+   
 
     public override void Spawned()
     {
@@ -195,6 +198,7 @@ public class PlayerModel : NetworkBehaviour, IDamageable
         var behaviour = changed.Behaviour;
     
         behaviour.OnDamage(behaviour._life / behaviour._maxLlife);
+               
     }
 
     public void Move(float xMovement)
@@ -227,7 +231,8 @@ public class PlayerModel : NetworkBehaviour, IDamageable
         if (_blocking) return;
 
         _life -= dmg;
-        sliderBar.value = _life;
+        GameManager.instance.UpdateSliders();
+        
         if (_life <= 0)
             Died();
 
@@ -305,6 +310,7 @@ public class PlayerModel : NetworkBehaviour, IDamageable
             _capsuleCollider.height = 1.79f;
         }
     }
+
 
 
     IEnumerator Deactivate(GameObject obj, float cd)

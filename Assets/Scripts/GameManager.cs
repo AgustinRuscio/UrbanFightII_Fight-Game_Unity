@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 using Fusion;
 using UnityEngine.SceneManagement;
 
@@ -19,7 +20,11 @@ public class GameManager : NetworkBehaviour
     public PlayerModel _playerTwo;
 
     [SerializeField]
-    private GameObject loseCanvas, winCanvas, FightImage;
+    public Slider sliderP1, sliderP2;
+    
+
+    [SerializeField]
+    private GameObject loseCanvas, winCanvas, FightImage, _waitingPlayerCanvas;
     
     public int PlayerCounting { get; private set; }
 
@@ -36,6 +41,9 @@ public class GameManager : NetworkBehaviour
             instance = this;
         else
             Destroy(gameObject);
+
+        
+
 
     }
 
@@ -93,9 +101,23 @@ public class GameManager : NetworkBehaviour
             if (_playerOne == null)
             {
                 _playerOne = model;
+                _players[0].SetPosition(_playerTwoSpawnPoint[0].position);
                 Debug.Log("I'm player one");
+                sliderP1.value = _playerOne._life;
+                _waitingPlayerCanvas.SetActive(true);
+                
+                Time.timeScale = 0f;
+
             }
-            else _playerTwo = model;
+            else 
+            { 
+                _playerTwo = model;
+                _players[1].SetPosition(_playerTwoSpawnPoint[1].position);
+                Debug.Log("I'm player two");
+                sliderP2.value = _playerTwo._life;
+                _waitingPlayerCanvas.SetActive(false);
+                Time.timeScale = 1f;
+            }
         
         
             if(_playerOne != null && _playerTwo != null)
@@ -124,9 +146,19 @@ public class GameManager : NetworkBehaviour
         }
 
         counter.text = _players.Count.ToString();
-    }
-    
 
+
+      
+    }
+
+
+    public void UpdateSliders()
+    {
+        sliderP1.value = _playerOne._life;
+        sliderP2.value = _playerTwo._life;
+    }
+
+  
     
 
     public void PlayerDeath()
