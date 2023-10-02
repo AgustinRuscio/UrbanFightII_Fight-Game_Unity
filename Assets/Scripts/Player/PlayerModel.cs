@@ -230,8 +230,7 @@ public class PlayerModel : NetworkBehaviour, IDamageable
     {
         if (_blocking) return;
 
-        _life -= dmg;
-        GameManager.instance.UpdateSliders();
+        _life -= dmg;      
         
         if (_life <= 0)
             Died();

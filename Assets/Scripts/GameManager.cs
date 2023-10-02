@@ -146,7 +146,7 @@ public class GameManager : NetworkBehaviour
         }
 
         counter.text = _players.Count.ToString();
-
+        
 
       
     }
@@ -154,8 +154,8 @@ public class GameManager : NetworkBehaviour
 
     public void UpdateSliders()
     {
-        sliderP1.value = _playerOne._life;
-        sliderP2.value = _playerTwo._life;
+        //sliderP1.value = _playerOne._life;
+        //sliderP2.value = _playerTwo._life;
     }
 
   
