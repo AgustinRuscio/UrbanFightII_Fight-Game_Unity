@@ -5,8 +5,8 @@ public class PlayerController
 {
     private PlayerModel _model;
 
-    public  Action OnUpdate;
-    public  Action OnFixedUpdate;
+    public Action OnUpdate;
+    public Action OnFixedUpdate;
 
     public PlayerController(PlayerModel model)
     {

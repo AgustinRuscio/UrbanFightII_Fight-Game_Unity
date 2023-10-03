@@ -47,6 +47,9 @@ public class PlayerModel : NetworkBehaviour, IDamageable
     [Networked(OnChanged = nameof(OnLifeChange))] [HideInInspector]
     public float _life { get; set; }
 
+    [SerializeField]
+    public LifeBar lifeBar;
+    
     public event Action<float> OnDamage = delegate { };
 
     [SerializeField]
@@ -90,7 +93,7 @@ public class PlayerModel : NetworkBehaviour, IDamageable
     private bool _crouching = false;
     private bool _blocking = false;
 
-    private bool MatchOn;
+    private bool MatchOn = true;
 
     void Awake()
     {
@@ -115,8 +118,6 @@ public class PlayerModel : NetworkBehaviour, IDamageable
         OnHighKickAnim += view.HighKick;
         OnGetHurtnim += view.GetHurt;
         OnBlocking += view.Blocking;
-
-        
     }
    
 
@@ -132,8 +133,8 @@ public class PlayerModel : NetworkBehaviour, IDamageable
             _youIndicator = Instantiate(_youIndicatorPrefab, transform);
             _youIndicator.transform.Rotate(0, -90, 0);
 
-            StartCoroutine(wait());
         }
+        StartCoroutine(wait());
     }
     public void SetPosition(Vector3 newPos)
     {
@@ -170,7 +171,7 @@ public class PlayerModel : NetworkBehaviour, IDamageable
         if(_youIndicator != null)
         _youIndicator.transform.position = transform.position + Vector3.up * 1.4f;
 
-        MatchOn = !GameManager.instance.MatchOn;
+       // MatchOn = !GameManager.instance.MatchOn;
     }
 
 
@@ -198,7 +199,9 @@ public class PlayerModel : NetworkBehaviour, IDamageable
         var behaviour = changed.Behaviour;
     
         behaviour.OnDamage(behaviour._life / behaviour._maxLlife);
-               
+        
+        if(behaviour.lifeBar != null)
+        behaviour.lifeBar.UpdateLifeBar(behaviour._life / behaviour._maxLlife);
     }
 
     public void Move(float xMovement)
@@ -234,6 +237,7 @@ public class PlayerModel : NetworkBehaviour, IDamageable
         
         if (_life <= 0)
             Died();
+
 
         OnGetHurtnim();
     }

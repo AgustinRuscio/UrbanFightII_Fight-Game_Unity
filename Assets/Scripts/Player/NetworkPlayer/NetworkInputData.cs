@@ -8,7 +8,10 @@ public struct NetworkInputData : INetworkInput
     public float xMovement;
     public NetworkBool isJump; 
     public NetworkBool isCrouching; 
-    public NetworkBool isLanded; 
     public NetworkBool isBlocking; 
-    public NetworkBool _canMove; 
+    public NetworkBool _canMove;
+    
+    public NetworkBool _punch; 
+    public NetworkBool _highKick; 
+    public NetworkBool _lowKick; 
 }

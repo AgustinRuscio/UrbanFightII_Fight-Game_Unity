@@ -13,14 +13,14 @@ public class GameManager : NetworkBehaviour
     [SerializeField]
     private Transform[] _playerTwoSpawnPoint;
 
-    [SerializeField]
+    [SerializeField] 
     public List<PlayerModel> _players;
 
     public PlayerModel _playerOne;
     public PlayerModel _playerTwo;
 
     [SerializeField]
-    public Slider sliderP1, sliderP2;
+    public LifeBar sliderP1, sliderP2;
     
 
     [SerializeField]
@@ -33,7 +33,6 @@ public class GameManager : NetworkBehaviour
 
     private float _timer = 90;
 
-    public bool MatchOn { get; private set; }
 
     private void Awake()
     {
@@ -41,10 +40,6 @@ public class GameManager : NetworkBehaviour
             instance = this;
         else
             Destroy(gameObject);
-
-        
-
-
     }
 
     IEnumerator Desapear()
@@ -57,7 +52,7 @@ public class GameManager : NetworkBehaviour
 
     private void Update()
     {
-        if (!MatchOn) return;
+        //if (!MatchOn) return;
 
             _timer -= Time.deltaTime;
 
@@ -67,17 +62,70 @@ public class GameManager : NetworkBehaviour
 
     private void MatchFinishedByTime()
     {
-        MatchOn = false;
-
-
+        //MatchOn = false;
     }
 
     public void AddPLayer(PlayerModel model)
     {
-        RPC_AddPLayer(model);
+        //RPC_AddPLayer(model);
 
+        if (!_players.Contains(model))
+        {
+            _players.Add(model);
 
-        //if (!Object.HasStateAuthority) return;
+            //Cadena If
+            if (Object.HasStateAuthority)
+            {
+                if (model.HasInputAuthority)
+                {
+                    _playerOne = model;
+                    _players[0].SetPosition(_playerTwoSpawnPoint[0].position);
+                    Debug.Log("I'm player one");
+                    _playerOne.lifeBar = sliderP1;
+                    _playerOne.lifeBar.UpdateLifeBar(model._life / model._maxLlife);
+
+                }
+                else
+                {
+                    _playerTwo = model;
+                    _players[0].SetPosition(_playerTwoSpawnPoint[1].position);
+                    Debug.Log("I'm player Two");
+                    _playerTwo.lifeBar = sliderP2;
+                    _playerTwo.lifeBar.UpdateLifeBar(model._life / model._maxLlife);
+                }
+                
+            }
+            else
+            {
+                if (model.HasStateAuthority)
+                {
+                    _playerTwo = model;
+                    _players[0].SetPosition(_playerTwoSpawnPoint[1].position);
+                    Debug.Log("I'm player two");
+                    _playerTwo.lifeBar = sliderP2;
+                    _playerTwo.lifeBar.UpdateLifeBar(model._life / model._maxLlife);
+
+                }else
+                {
+                    _playerOne = model;
+                    _players[0].SetPosition(_playerTwoSpawnPoint[0].position);
+                    Debug.Log("I'm player one");
+                    _playerOne.lifeBar = sliderP1;
+                    _playerOne.lifeBar.UpdateLifeBar(model._life / model._maxLlife);
+
+                }
+            }
+
+            if (_playerOne != null && _playerTwo != null)
+            {
+                for (int i = 0; i < _players.Count; i++)
+                {
+                    _players[i].SetPosition(_playerTwoSpawnPoint[i].position);
+                }
+                Debug.Log("Ambos dentro");
+                //MatchOn = true;
+            }
+        }
         //
         //if (!_players.Contains(model))
         //       _players.Add(model);
@@ -103,77 +151,64 @@ public class GameManager : NetworkBehaviour
                 _playerOne = model;
                 _players[0].SetPosition(_playerTwoSpawnPoint[0].position);
                 Debug.Log("I'm player one");
-                sliderP1.value = _playerOne._life;
+                model.lifeBar = sliderP1;
+                //sliderP1.value = _playerOne._life / _playerOne._maxLlife;
                 _waitingPlayerCanvas.SetActive(true);
-                
                 Time.timeScale = 0f;
-
             }
             else 
             { 
                 _playerTwo = model;
                 _players[1].SetPosition(_playerTwoSpawnPoint[1].position);
                 Debug.Log("I'm player two");
-                sliderP2.value = _playerTwo._life;
+                //sliderP2.value = _playerTwo._life / _playerTwo._maxLlife;
                 _waitingPlayerCanvas.SetActive(false);
                 Time.timeScale = 1f;
             }
         
-        
             if(_playerOne != null && _playerTwo != null)
             {
+                //MatchOn = true;
                 for (int i = 0; i < _players.Count; i++)
                 {
                     _players[i].SetPosition(_playerTwoSpawnPoint[i].position);
                 }
             }
-
         }
-
-
-
     }
-
+    
     public override void FixedUpdateNetwork()
     {
-        if (MatchOn)
-        {
-            _timerText.text = _timer.ToString("0");
-        }
-        else
-        {
-            _timerText.gameObject.SetActive(false);
-        }
+       //if (MatchOn)
+       //{
+       //    _timerText.text = _timer.ToString("0");
+       //}
+       //else
+       //{
+       //    _timerText.gameObject.SetActive(false);
+       //}
 
         counter.text = _players.Count.ToString();
-        
-
-      
     }
 
 
-    public void UpdateSliders()
-    {
-        //sliderP1.value = _playerOne._life;
-        //sliderP2.value = _playerTwo._life;
-    }
-
-  
-    
+   // public void UpdateSliders()
+   // {
+   //     sliderP1.value = _playerOne._life / _playerOne._maxLlife;
+   //     sliderP2.value = _playerTwo._life / _playerTwo._maxLlife;
+   // }
 
     public void PlayerDeath()
     {
         Time.timeScale =0f;
-        MatchOn = false;
+        //MatchOn = false;
         loseCanvas.SetActive(true);
     }
 
     public void PlayerWin()
     {
         Time.timeScale =0f;
-        MatchOn = false;
+        //MatchOn = false;
         winCanvas.SetActive(true);
     }
-
-
 }
