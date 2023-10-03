@@ -9,7 +9,6 @@ public struct NetworkInputData : INetworkInput
     public NetworkBool isJump; 
     public NetworkBool isCrouching; 
     public NetworkBool isBlocking; 
-    public NetworkBool _canMove;
     
     public NetworkBool _punch; 
     public NetworkBool _highKick; 

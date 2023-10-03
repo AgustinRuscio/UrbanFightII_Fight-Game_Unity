@@ -12,10 +12,6 @@ public class PlayerModel : NetworkBehaviour, IDamageable
 
     NetworkInputData inputData;
 
-    Camera cam;
-    public float cameraMargin = 95f;
-
-
     [SerializeField]
     private GameObject _youIndicatorPrefab;
     private GameObject _youIndicator;
@@ -123,8 +119,7 @@ public class PlayerModel : NetworkBehaviour, IDamageable
 
     public override void Spawned()
     {
-        _life = _maxLlife;        
-        cam = Camera.main;
+        _life = _maxLlife;  
         CameraMovement.instance.AddPlayer(transform);
         TargetSetter.Instance.AddPlayer(this);
 
@@ -179,15 +174,27 @@ public class PlayerModel : NetworkBehaviour, IDamageable
     {
         if(!MatchOn) return;
 
-        OnControllerUpdate();
-        OnControllerFixedUpdate();
+        //OnControllerUpdate();
+        //OnControllerFixedUpdate();
 
         if (GetInput(out inputData))
         {
+            Move(inputData.xMovement);
+            
             if (inputData.isJump)
                 Jump();
-
-            Move(inputData.xMovement);
+            
+            if (inputData._punch)
+                Punch();
+            
+            if (inputData._highKick)
+                HighKick();
+            
+            if (inputData._lowKick)
+                LowKick();
+                
+            Crouch(inputData.isCrouching);
+            Blocking(inputData.isBlocking);
         }
 
         if (target != null)

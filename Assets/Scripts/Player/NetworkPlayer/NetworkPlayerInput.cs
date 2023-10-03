@@ -20,12 +20,13 @@ public class NetworkPlayerInput : MonoBehaviour
     void Update()
     {
         _inputData.xMovement = Input.GetAxis("Horizontal");
+        _inputData.isBlocking = Input.GetKey(KeyCode.Q);
+        _inputData.isCrouching = Input.GetKey(KeyCode.S);
 
         if (Input.GetKeyDown(KeyCode.W))
             isJumpPessed = true;
         
-        if(Input.GetKey(KeyCode.S))
-        isCrouching = true;
+        
 
         if (Input.GetKeyDown(KeyCode.J))
             punch = true;
@@ -36,8 +37,6 @@ public class NetworkPlayerInput : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.K))
             lKick = true;
 
-        if (Input.GetKey(KeyCode.Q))
-            isBlocking = true;
 
     }
 
@@ -45,9 +44,6 @@ public class NetworkPlayerInput : MonoBehaviour
     {
         _inputData.isJump = isJumpPessed;
         isJumpPessed = false;
-        
-        _inputData.isCrouching = isCrouching;
-        _inputData.isBlocking = isBlocking;
         
         _inputData._punch = punch;
         punch = false;
