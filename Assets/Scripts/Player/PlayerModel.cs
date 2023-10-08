@@ -9,7 +9,7 @@ using System.Collections.Generic;
 public class PlayerModel : NetworkBehaviour, IDamageable
 {
     //NetWork
-
+    
     NetworkInputData inputData;
 
     [SerializeField]
@@ -18,9 +18,6 @@ public class PlayerModel : NetworkBehaviour, IDamageable
 
     [Header("Components")]
     private NetworkRigidbody _rigidBody;
-
-   // [SerializeField]
-    //private Slider sliderBar;
 
     [SerializeField]
     private NetworkMecanimAnimator _animator;
@@ -95,7 +92,6 @@ public class PlayerModel : NetworkBehaviour, IDamageable
     {
         _rigidBody = GetComponent<NetworkRigidbody>();
         _capsuleCollider = GetComponent<CapsuleCollider>();
-       // sliderBar = _youIndicatorPrefab.GetComponent<Slider>();
 
         //Setting controller Methods in Actions
         var controller = new PlayerController(this);
@@ -103,7 +99,6 @@ public class PlayerModel : NetworkBehaviour, IDamageable
         OnControllerUpdate += controller.OnUpdate;
         OnControllerFixedUpdate += controller.OnFixedUpdate;
 
-        //Setting view Methods on Actions
         var view = new PlayerView(_animator);
 
         OnMoveAnim += view.Move;
@@ -127,8 +122,8 @@ public class PlayerModel : NetworkBehaviour, IDamageable
         {
             _youIndicator = Instantiate(_youIndicatorPrefab, transform);
             _youIndicator.transform.Rotate(0, -90, 0);
-
         }
+
         StartCoroutine(wait());
     }
     public void SetPosition(Vector3 newPos)
@@ -166,13 +161,13 @@ public class PlayerModel : NetworkBehaviour, IDamageable
         if(_youIndicator != null)
         _youIndicator.transform.position = transform.position + Vector3.up * 1.4f;
 
-       // MatchOn = !GameManager.instance.MatchOn;
+        MatchOn = GameManager.instance.MatchState;
     }
 
 
     public override void FixedUpdateNetwork()
     {
-        if(!MatchOn) return;
+        if (!MatchOn) return;
 
         //OnControllerUpdate();
         //OnControllerFixedUpdate();
@@ -345,5 +340,10 @@ public class PlayerModel : NetworkBehaviour, IDamageable
         Winning();
         GameManager.instance.PlayerDeath();
         //Runner.Shutdown();
+    }
+
+    public void Lose()
+    {
+        Died();
     }
 }

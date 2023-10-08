@@ -20,13 +20,9 @@ public class SpwnNetwrokPlayer : MonoBehaviour, INetworkRunnerCallbacks
         if (!NetworkPlayer.Local) return;
        
         if (!_playerInputs)
-        {
             _playerInputs = NetworkPlayer.Local.GetComponent<NetworkPlayerInput>();
-        }
         else
-        {
             input.Set(_playerInputs.GetInputData());
-        }
     }
 
     public void OnConnectedToServer(NetworkRunner runner)
@@ -35,28 +31,13 @@ public class SpwnNetwrokPlayer : MonoBehaviour, INetworkRunnerCallbacks
         {
             Debug.Log("[Custom msg] On Connected to Server - Spawning local player");
 
-            NetworkPlayer a = runner.Spawn(_playerPrefab, _playerOneSpawnPoint.position, _playerOneSpawnPoint.rotation, runner.LocalPlayer);
-
-            // if (!runner.ActivePlayers.Any())
-            // {
-            //     NetworkPlayer a = runner.Spawn(_playerPrefab, _playerOneSpawnPoint.position, _playerOneSpawnPoint.rotation, runner.LocalPlayer);
-            //     GameManager.instance.AddPlayer(a);
-            // }
-            // else
-            // {
-            //     NetworkPlayer a = runner.Spawn(_playerPrefab, _playerTwoSpawnPoint.position, _playerTwoSpawnPoint.rotation, runner.LocalPlayer);
-            //     GameManager.instance.AddPlayer(a);
-            // }
+            runner.Spawn(_playerPrefab, _playerOneSpawnPoint.position, _playerOneSpawnPoint.rotation, runner.LocalPlayer);
         }
     }
 
     #region cosa
 
-    public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
-    {
-        //Forma uno
-        //GameManager.instance.AddPlayer(player);
-    }
+    public void OnPlayerJoined(NetworkRunner runner, PlayerRef player) { }
 
     public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason) { }
 
