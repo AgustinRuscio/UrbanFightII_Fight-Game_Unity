@@ -59,6 +59,8 @@ public class GameManager : NetworkBehaviour
 
         if (_timer <= 0)
             MatchFinishedByTime();
+
+
     }
 
     private void MatchFinishedByTime()
@@ -73,10 +75,12 @@ public class GameManager : NetworkBehaviour
         if (!_players.Contains(model))
         {
             _players.Add(model);
+            
 
             //Cadena If
             if (Object.HasStateAuthority)
             {
+                
                 if (model.HasInputAuthority)
                 {
                     _playerOne = model;
@@ -84,7 +88,9 @@ public class GameManager : NetworkBehaviour
                     Debug.Log("I'm player one");
                     _playerOne.lifeBar = sliderP1;
                     _playerOne.lifeBar.UpdateLifeBar(model._life / model._maxLlife);
-
+                     Verification();
+                    Debug.Log("soy el que tiene input autorithy");
+                   
                 }
                 else
                 {
@@ -93,8 +99,9 @@ public class GameManager : NetworkBehaviour
                     Debug.Log("I'm player Two");
                     _playerTwo.lifeBar = sliderP2;
                     _playerTwo.lifeBar.UpdateLifeBar(model._life / model._maxLlife);
+                    
                 }
-                
+
             }
             else
             {
@@ -104,7 +111,8 @@ public class GameManager : NetworkBehaviour
                     _players[0].SetPosition(_playerTwoSpawnPoint[1].position);
                     Debug.Log("I'm player two");
                     _playerTwo.lifeBar = sliderP2;
-                    _playerTwo.lifeBar.UpdateLifeBar(model._life / model._maxLlife);
+                    _playerTwo.lifeBar.UpdateLifeBar(model._life / model._maxLlife);                    
+                    Debug.Log("soy el que tiene State of autorithy");
 
                 }
                 else
@@ -114,9 +122,13 @@ public class GameManager : NetworkBehaviour
                     Debug.Log("I'm player one");
                     _playerOne.lifeBar = sliderP1;
                     _playerOne.lifeBar.UpdateLifeBar(model._life / model._maxLlife);
+                     Verification();
 
                 }
             }
+
+           
+
 
             if (_playerOne != null && _playerTwo != null)
             {
@@ -129,6 +141,25 @@ public class GameManager : NetworkBehaviour
             }
         }
     }
+
+    public void Verification( )
+    {
+        
+
+            if (_players.Count == 1)
+            {
+                _waitingPlayerCanvas.SetActive(true);
+            
+            }
+            else
+            {
+                _waitingPlayerCanvas.SetActive(false);
+            }
+        
+      
+
+    }
+
 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void RPC_AddPLayer(PlayerModel model)
