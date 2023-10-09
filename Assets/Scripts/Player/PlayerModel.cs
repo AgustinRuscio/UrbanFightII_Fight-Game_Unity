@@ -142,6 +142,14 @@ public class PlayerModel : NetworkBehaviour, IDamageable
         yield return new WaitForSeconds(.2f);
 
         GameManager.instance.AddPLayer(this);
+        MatchOn = GameManager.instance.MatchState;
+
+    }
+
+
+    public void MatchStarted()
+    {
+        MatchOn = true;
     }
 
     public void SetTarget(Transform t)
@@ -151,8 +159,9 @@ public class PlayerModel : NetworkBehaviour, IDamageable
 
     public override void Despawned(NetworkRunner runner, bool hasState)
     {
-        CameraMovement.instance.RemovePlayer(transform);
         TargetSetter.Instance.RemovePlayer(this);
+        CameraMovement.instance.RemovePlayer(transform);
+        GameManager.instance.RemovePlayer(this);
     }
 
 
@@ -161,7 +170,6 @@ public class PlayerModel : NetworkBehaviour, IDamageable
         if(_youIndicator != null)
         _youIndicator.transform.position = transform.position + Vector3.up * 1.4f;
 
-        MatchOn = GameManager.instance.MatchState;
     }
 
 
@@ -339,10 +347,10 @@ public class PlayerModel : NetworkBehaviour, IDamageable
     {
         Winning();
         GameManager.instance.PlayerDeath();
-        //Runner.Shutdown();
     }
 
-    public void Lose()
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    public void RPC_Lose()
     {
         Died();
     }

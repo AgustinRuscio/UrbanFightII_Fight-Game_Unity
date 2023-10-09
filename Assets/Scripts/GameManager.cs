@@ -13,7 +13,7 @@ public class GameManager : NetworkBehaviour
     [SerializeField]
     private Transform[] _playerTwoSpawnPoint;
 
-    [SerializeField] 
+    [SerializeField]
     public List<PlayerModel> _players;
 
     public PlayerModel _playerOne;
@@ -21,15 +21,15 @@ public class GameManager : NetworkBehaviour
 
     [SerializeField]
     public LifeBar sliderP1, sliderP2;
-    
+
 
     [SerializeField]
     private GameObject loseCanvas, winCanvas, tieCanvas, FightImage, _waitingPlayerCanvas;
-    
+
     public int PlayerCounting { get; private set; }
 
     [SerializeField]
-    private TextMeshProUGUI _timerText, counter;
+    private TextMeshProUGUI _timerText;
 
     [SerializeField]
     private float _timer = 90;
@@ -49,17 +49,17 @@ public class GameManager : NetworkBehaviour
     IEnumerator Desapear()
     {
         yield return new WaitForSeconds(2f);
+        _matchOn = true;
         FightImage.gameObject.SetActive(false);
 
-        _matchOn = true;
     }
-   
-    
+
+
 
     private void Update()
     {
-        if (!_matchOn) return;  
-        
+        if (!_matchOn) return;
+
         _timer -= Time.deltaTime;
 
         if (_timer <= 0)
@@ -70,14 +70,12 @@ public class GameManager : NetworkBehaviour
     {
         _matchOn = false;
 
-
         if (_playerOne._life == _playerTwo._life)
             tieCanvas.SetActive(true);
-       else if(_playerOne._life > _playerTwo._life)
-            _playerTwo.Lose();
+        else if (_playerOne._life > _playerTwo._life)
+            _playerTwo.RPC_Lose();
         else
-            _playerOne.Lose();
-
+            _playerOne.RPC_Lose();
     }
 
     public void AddPLayer(PlayerModel model)
@@ -85,10 +83,9 @@ public class GameManager : NetworkBehaviour
         if (!_players.Contains(model))
         {
             _players.Add(model);
-            
+
             if (Object.HasStateAuthority)
             {
-                
                 if (model.HasInputAuthority)
                 {
                     _playerOne = model;
@@ -97,7 +94,7 @@ public class GameManager : NetworkBehaviour
                     _playerOne.lifeBar = sliderP1;
                     _playerOne.lifeBar.UpdateLifeBar(model._life / model._maxLlife);
 
-                     Verification();
+                    Verification();
                 }
                 else
                 {
@@ -106,9 +103,8 @@ public class GameManager : NetworkBehaviour
 
                     _playerTwo.lifeBar = sliderP2;
                     _playerTwo.lifeBar.UpdateLifeBar(model._life / model._maxLlife);
-                    
-                }
 
+                }
             }
             else
             {
@@ -128,16 +124,17 @@ public class GameManager : NetworkBehaviour
                     _playerOne.lifeBar = sliderP1;
                     _playerOne.lifeBar.UpdateLifeBar(model._life / model._maxLlife);
 
-                     Verification();
+                    Verification();
                 }
             }
-
 
             if (_playerOne != null && _playerTwo != null)
             {
                 Verification();
 
                 _playerOne.SetPosition(_playerTwoSpawnPoint[0].position);
+                _playerOne.MatchStarted();
+                _playerTwo.MatchStarted();
                 _playerTwo.SetPosition(_playerTwoSpawnPoint[1].position);
 
 
@@ -146,6 +143,23 @@ public class GameManager : NetworkBehaviour
 
             }
         }
+    }
+
+    public void RemovePlayer(PlayerModel model)
+    {
+        if(_players.Contains(model))
+            _players.Remove(model);
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void RPC_RESET()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
+
+    public void BTN_GoTomenu()
+    {
+        RPC_RESET();
     }
 
     public void Verification()
@@ -161,15 +175,12 @@ public class GameManager : NetworkBehaviour
             _timerText.gameObject.SetActive(true);
         }
     }
-
-
     
     public override void FixedUpdateNetwork()
     {
        if (!_matchOn) return;
         
         _timerText.text = _timer.ToString("0");
-
     }
 
     public void PlayerDeath()
