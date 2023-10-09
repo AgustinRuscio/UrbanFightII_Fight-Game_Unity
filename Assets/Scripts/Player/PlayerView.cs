@@ -1,5 +1,8 @@
-using System;
-using UnityEngine;
+//--------------------------------------------
+//          Agustin Ruscio & Merdeces Riego
+//--------------------------------------------
+
+
 using Fusion;
 
 public class PlayerView 

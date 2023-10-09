@@ -1,6 +1,9 @@
-using System.Collections;
+//--------------------------------------------
+//          Agustin Ruscio & Merdeces Riego
+//--------------------------------------------
+
+
 using System.Collections.Generic;
-using System.Xml.Serialization;
 using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
@@ -48,6 +51,7 @@ public class CameraMovement : MonoBehaviour
         {
             middlePoint += player.position;
         }
+
         middlePoint /= players.Count;
 
         middlePoint.z = transform.position.z;

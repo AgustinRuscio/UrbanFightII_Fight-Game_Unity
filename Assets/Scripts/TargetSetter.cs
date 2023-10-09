@@ -1,6 +1,9 @@
-using System.Collections;
+//--------------------------------------------
+//          Agustin Ruscio & Merdeces Riego
+//--------------------------------------------
+
+
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class TargetSetter : MonoBehaviour
@@ -27,7 +30,6 @@ public class TargetSetter : MonoBehaviour
         {
             _players[0].SetTarget(_players[1].transform);
             _players[1].SetTarget(_players[0].transform);
-
         }
     }
 

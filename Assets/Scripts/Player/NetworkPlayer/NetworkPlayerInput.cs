@@ -1,5 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
+//--------------------------------------------
+//          Agustin Ruscio & Merdeces Riego
+//--------------------------------------------
+
+
 using UnityEngine;
 
 public class NetworkPlayerInput : MonoBehaviour
@@ -7,8 +10,6 @@ public class NetworkPlayerInput : MonoBehaviour
     NetworkInputData _inputData;
 
     bool isJumpPessed;
-    bool isCrouching;
-    bool isBlocking;
     
     bool punch;
     bool hKich;
@@ -26,8 +27,6 @@ public class NetworkPlayerInput : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.W))
             isJumpPessed = true;
         
-        
-
         if (Input.GetKeyDown(KeyCode.J))
             punch = true;
 
@@ -36,8 +35,6 @@ public class NetworkPlayerInput : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.K))
             lKick = true;
-
-
     }
 
     public NetworkInputData GetInputData()

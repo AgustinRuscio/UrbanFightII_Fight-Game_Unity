@@ -1,3 +1,8 @@
+//--------------------------------------------
+//          Agustin Ruscio & Merdeces Riego
+//--------------------------------------------
+
+
 using UnityEngine;
 using Fusion;
 using System.Threading.Tasks;
@@ -20,7 +25,6 @@ public class NetWorkRunnerHandler : MonoBehaviour
     {
         var sceneManager = GetComponent<NetworkSceneManagerDefault>();
 
-        //Le digo que tome inputs
         _networkRunner.ProvideInput = true;
 
         return _networkRunner.StartGame(new StartGameArgs

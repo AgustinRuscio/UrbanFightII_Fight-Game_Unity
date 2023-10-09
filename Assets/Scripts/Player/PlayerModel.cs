@@ -1,9 +1,12 @@
+//--------------------------------------------
+//          Agustin Ruscio & Merdeces Riego
+//--------------------------------------------
+
+
 using System.Collections;
 using UnityEngine;
 using System;
 using Fusion;
-using UnityEngine.UI;
-using System.Collections.Generic;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerModel : NetworkBehaviour, IDamageable
@@ -126,16 +129,12 @@ public class PlayerModel : NetworkBehaviour, IDamageable
 
         StartCoroutine(wait());
     }
-    public void SetPosition(Vector3 newPos)
-    {
-        RPC_Position(newPos);
-    }
+    public void SetPosition(Vector3 newPos) => RPC_Position(newPos);
+    
 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-    public void RPC_Position(Vector3 newPos)
-    {
-        transform.position = newPos;
-    }
+    public void RPC_Position(Vector3 newPos) => transform.position = newPos;
+    
 
     private IEnumerator wait()
     {
@@ -143,19 +142,13 @@ public class PlayerModel : NetworkBehaviour, IDamageable
 
         GameManager.instance.AddPLayer(this);
         MatchOn = GameManager.instance.MatchState;
-
     }
 
+    public void ChangeMatchState(bool newState) => MatchOn = newState;
+    
 
-    public void MatchStarted()
-    {
-        MatchOn = true;
-    }
-
-    public void SetTarget(Transform t)
-    {
-        target = t;
-    }
+    public void SetTarget(Transform newTarget) => target = newTarget;
+    
 
     public override void Despawned(NetworkRunner runner, bool hasState)
     {
@@ -169,9 +162,7 @@ public class PlayerModel : NetworkBehaviour, IDamageable
     {
         if(_youIndicator != null)
         _youIndicator.transform.position = transform.position + Vector3.up * 1.4f;
-
     }
-
 
     public override void FixedUpdateNetwork()
     {
@@ -253,15 +244,11 @@ public class PlayerModel : NetworkBehaviour, IDamageable
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.Proxies)]
-    public void RPC_Win()
-    {
-        GameManager.instance.PlayerWin();
-    }
+    public void RPC_Win() => GameManager.instance.PlayerWin();
+    
 
-    public void Winning()
-    {
-        RPC_Win();
-    }
+    public void Winning() => RPC_Win();
+    
 
     public void Blocking(bool isBloking)
     {
@@ -299,11 +286,8 @@ public class PlayerModel : NetworkBehaviour, IDamageable
         StartCoroutine(Deactivate(_downPunchZone, 2f));
     }
 
-    private void OnAttackiong(bool state)
-    {
-        _canMove = state;
-    }
-
+    private void OnAttackiong(bool state) => _canMove = state;
+    
     public void Crouch(bool isBool)
     {
         if (!isLanded || _blocking) return;
@@ -323,7 +307,6 @@ public class PlayerModel : NetworkBehaviour, IDamageable
             _capsuleCollider.height = 1.79f;
         }
     }
-
 
 
     IEnumerator Deactivate(GameObject obj, float cd)
@@ -350,8 +333,5 @@ public class PlayerModel : NetworkBehaviour, IDamageable
     }
 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-    public void RPC_Lose()
-    {
-        Died();
-    }
+    public void RPC_Lose() => Died();
 }

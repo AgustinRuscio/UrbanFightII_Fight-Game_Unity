@@ -1,4 +1,8 @@
-using System.Collections;
+//--------------------------------------------
+//          Agustin Ruscio & Merdeces Riego
+//--------------------------------------------
+
+
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -31,7 +35,6 @@ public class QualitySttings : MonoBehaviour
             _fullScreenToggle.isOn = false;
 
         CheckResolution();
-
     }
 
     public void ChangeQuality(int value)
@@ -39,10 +42,9 @@ public class QualitySttings : MonoBehaviour
         QualitySettings.SetQualityLevel(value);
         PlayerPrefs.SetInt("Quality", value);
     }
-    public void ActivateFullScreen(bool fullScreen)
-    {
-        Screen.fullScreen = fullScreen;
-    }
+
+    public void ActivateFullScreen(bool fullScreen) => Screen.fullScreen = fullScreen;
+    
 
     public void CheckResolution()
     {

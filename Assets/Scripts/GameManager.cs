@@ -1,8 +1,12 @@
+//--------------------------------------------
+//          Agustin Ruscio & Merdeces Riego
+//--------------------------------------------
+
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using UnityEngine.UI;
 using Fusion;
 using UnityEngine.SceneManagement;
 
@@ -54,8 +58,6 @@ public class GameManager : NetworkBehaviour
 
     }
 
-
-
     private void Update()
     {
         if (!_matchOn) return;
@@ -71,11 +73,21 @@ public class GameManager : NetworkBehaviour
         _matchOn = false;
 
         if (_playerOne._life == _playerTwo._life)
-            tieCanvas.SetActive(true);
+            MatchTie();
         else if (_playerOne._life > _playerTwo._life)
             _playerTwo.RPC_Lose();
         else
             _playerOne.RPC_Lose();
+    }
+
+    private void MatchTie()
+    {
+        Time.timeScale = 0f;
+        _matchOn = false;
+        tieCanvas.SetActive(true);
+
+        _playerOne.ChangeMatchState(false);
+        _playerTwo.ChangeMatchState(false);
     }
 
     public void AddPLayer(PlayerModel model)
@@ -133,14 +145,13 @@ public class GameManager : NetworkBehaviour
                 Verification();
 
                 _playerOne.SetPosition(_playerTwoSpawnPoint[0].position);
-                _playerOne.MatchStarted();
-                _playerTwo.MatchStarted();
+                _playerOne.ChangeMatchState(true);
+                _playerTwo.ChangeMatchState(true);
                 _playerTwo.SetPosition(_playerTwoSpawnPoint[1].position);
 
 
                 FightImage.gameObject.SetActive(true);
                 StartCoroutine(Desapear());
-
             }
         }
     }

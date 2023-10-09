@@ -1932,7 +1932,7 @@ MonoBehaviour:
   FightImage: {fileID: 74521288}
   _waitingPlayerCanvas: {fileID: 1308551699}
   _timerText: {fileID: 99631954}
-  _timer: 90
+  _timer: 10
 --- !u!4 &540915785
 Transform:
   m_ObjectHideFlags: 0
