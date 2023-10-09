@@ -208,6 +208,7 @@ public class PlayerModel : NetworkBehaviour, IDamageable
     public void Move(float xMovement)
     {
         if (!_canMove || _crouching || !isLanded || _blocking) return;
+        OnMoveAnim(_direction.x);
 
         _direction = new Vector3(xMovement, 0, 0);
 
@@ -215,16 +216,15 @@ public class PlayerModel : NetworkBehaviour, IDamageable
         _direction.Normalize();
         _direction *= _speed;
 
-        OnMoveAnim(_direction.x);
         _rigidBody.Rigidbody.AddForce(_direction);
     }
 
     public void Jump()
     {
         if (!_canMove || _crouching || !isLanded|| _blocking) return;
+        OnJumpAnim();
 
         _rigidBody.Rigidbody.AddForce(_rigidBody.Rigidbody.velocity.x, _jumpForce, _rigidBody.Rigidbody.velocity.z);
-        OnJumpAnim();
     }
 
     public void TakeDamage(float dmg) => RPC_GetHit(dmg);
@@ -234,13 +234,12 @@ public class PlayerModel : NetworkBehaviour, IDamageable
     {
         if (_blocking) return;
 
+        OnGetHurtnim();
+
         _life -= dmg;      
         
         if (_life <= 0)
             Died();
-
-
-        OnGetHurtnim();
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.Proxies)]
@@ -252,16 +251,16 @@ public class PlayerModel : NetworkBehaviour, IDamageable
 
     public void Blocking(bool isBloking)
     {
-        _blocking = isBloking;
         OnBlocking(_blocking);
+        _blocking = isBloking;
     }
 
     public void Punch()
     {
         if (!_canMove || _crouching || !isLanded || _blocking) return;
+        OnPunchAnim();
 
         OnAttackiong(false);
-        OnPunchAnim();
         _midPunchZone.SetActive(true);
         StartCoroutine(Deactivate(_midPunchZone, .7f));
     }
@@ -269,9 +268,9 @@ public class PlayerModel : NetworkBehaviour, IDamageable
     public void HighKick()
     {
         if (!_canMove || _crouching || !isLanded || _blocking) return;
+        OnHighKickAnim();
 
         OnAttackiong(false);
-        OnHighKickAnim();
         _upPunchZone.SetActive(true);
         StartCoroutine(Deactivate(_upPunchZone, 1.5f));
     }
@@ -279,9 +278,9 @@ public class PlayerModel : NetworkBehaviour, IDamageable
     public void LowKick()
     {
         if (!_canMove || _crouching || !isLanded || _blocking) return;
+        OnLowKickAnim();
 
         OnAttackiong(false);
-        OnLowKickAnim();
         _downPunchZone.SetActive(true);
         StartCoroutine(Deactivate(_downPunchZone, 2f));
     }
@@ -291,10 +290,10 @@ public class PlayerModel : NetworkBehaviour, IDamageable
     public void Crouch(bool isBool)
     {
         if (!isLanded || _blocking) return;
+        OnCrouchAnim(_crouching);
 
         _crouching = isBool;
 
-        OnCrouchAnim(_crouching);
 
         if (_crouching)
         {
