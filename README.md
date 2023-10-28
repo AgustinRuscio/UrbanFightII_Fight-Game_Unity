@@ -1,6 +1,8 @@
-# Urban Fighter II
+# Urban Fighter II - Multiplayer Online game
 
 ### Developed in Unity C#
+
+Multiplayer made with Fusion
 
 ![](https://i.postimg.cc/43j8Tc1R/Title.png)
 
